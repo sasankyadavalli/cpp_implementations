@@ -3,8 +3,8 @@
 
 template <typename T> class Vector {
 	private:
-		size_t size_;
-		size_t capacity_;
+		std::size_t size_;
+		std::size_t capacity_;
 		T* data_;
 
 	public:
@@ -25,14 +25,15 @@ template <typename T> class Vector {
 
 		void push_back(const T& obj){
 			if(size_ == capacity_){
-				T* temp = static_cast<T*>(std::malloc(((capacity_ == 0) ? 1 : 2*capacity_) * sizeof(T)));
+				std::size_t new_capacity_ = (capacity_ == 0) ? 1 : 2*capacity_;
+				T* temp = static_cast<T*>(std::malloc(new_capacity_ * sizeof(T)));
 				for(int i = 0; i < size_;i++){
 					new (temp + i) T(std::move(data_[i]));
 					data_[i].~T();
 				}
 				std::free(data_);
 				data_ = temp;
-				capacity_ = (capacity_ == 0) ? 1 : 2*capacity_; 
+				capacity_ = new_capacity_;
 			}
 			new (data_ + size_) T(obj); 
 			size_ += 1;
@@ -53,7 +54,7 @@ int main() {
 	v.push_back("World");
 	v.push_back("C++");
 	
-	for(int i = 0; i < v.size();i++){
+	for(size_t i = 0; i < v.size();i++){
 		std::cout << v[i] << "\n"; 
 	}
 	return 0;
