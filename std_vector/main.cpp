@@ -22,6 +22,19 @@ template <typename T> class Vector {
 
 
 	public:
+		// COPY CONSTRUCTOR
+		// MOVE CONSTRUCTOR
+		// 
+
+			Vector(Vector&& other) {
+		    other.data_ = this.data_;
+		    other.capacity_ = this.capacity_;
+		    other.size_ = this.size_;
+		    
+		    this.data_ nullptr;
+		    this.capacity_ = 0;
+		    this.size_ = 0;
+		}
 		Vector(size_t capacity)
 			: capacity_(capacity){
 			      	data_ = static_cast<T*>(std::malloc(capacity * sizeof(T)));
