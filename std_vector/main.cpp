@@ -105,6 +105,18 @@ public:
 		return size_;
 	}
 
+	void swap(Vector& other) noexcept {
+		using std::swap;
+
+		swap(data_, other.data_);
+		swap(capacity_, other.capacity_);
+		swap(size_, other.size_);
+	}
+
+	friend void swap(Vector& a, Vector& b) noexcept {
+		a.swap(b);
+	}
+
 	T &operator[](std::size_t index)
 	{
 		return data_[index];
@@ -208,13 +220,28 @@ public:
 int main()
 {
 	Vector<int> v(2);
-	Vector<int> b(10);
+	Vector<int> c(10);
 	v.push_back(11);
-	b = v;
+	c = v;
+
+	Vector<int> a(5);
+	Vector<int> b(5);
+	a.push_back(1);
+	a.push_back(2);
+	a.push_back(3);
+	b.push_back(4);
+	b.push_back(5);
+
+	using std::swap;
+	swap(a, b);
 
 	for (size_t i = 0; i < b.size(); i++)
 	{
 		std::cout << b[i] << "\n";
+	}
+
+	for(size_t i = 0; i < a.size(); i++) {
+		std::cout << a[i] << "\n";
 	}
 	return 0;
 }
