@@ -105,6 +105,10 @@ public:
 		return size_;
 	}
 
+    std::size_t capacity() const noexcept {
+        return capacity_;
+    }
+
 	void swap(Vector& other) noexcept {
 		using std::swap;
 
@@ -217,31 +221,31 @@ public:
 	}
 };
 
-int main()
-{
-	Vector<int> v(2);
-	Vector<int> c(10);
-	v.push_back(11);
-	c = v;
+// int main()
+// {
+// 	Vector<int> v(2);
+// 	Vector<int> c(10);
+// 	v.push_back(11);
+// 	c = v;
 
-	Vector<int> a(5);
-	Vector<int> b(5);
-	a.push_back(1);
-	a.push_back(2);
-	a.push_back(3);
-	b.push_back(4);
-	b.push_back(5);
+// 	Vector<int> a(5);
+// 	Vector<int> b(5);
+// 	a.push_back(1);
+// 	a.push_back(2);
+// 	a.push_back(3);
+// 	b.push_back(4);
+// 	b.push_back(5);
 
-	using std::swap;
-	swap(a, b);
+// 	using std::swap;
+// 	swap(a, b);
 
-	for (size_t i = 0; i < b.size(); i++)
-	{
-		std::cout << b[i] << "\n";
-	}
+// 	for (size_t i = 0; i < b.size(); i++)
+// 	{
+// 		std::cout << b[i] << "\n";
+// 	}
 
-	for(size_t i = 0; i < a.size(); i++) {
-		std::cout << a[i] << "\n";
-	}
-	return 0;
-}
+// 	for(size_t i = 0; i < a.size(); i++) {
+// 		std::cout << a[i] << "\n";
+// 	}
+// 	return 0;
+// }
