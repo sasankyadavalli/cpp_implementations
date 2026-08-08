@@ -1,4 +1,3 @@
-#include <iostream>
 #include <new>
 #include <utility>
 
@@ -219,12 +218,7 @@ public:
 		return *this;
 	}
 
-    void reserve(std::size_t new_capacity) {
-        if(capacity_ >= new_capacity) {
-            return;
-        }
-
-        T* oldData_ = data_;
+    T* allocate_and_relocate(std::size_t new_capacity) {
         T* newData_ = static_cast<T*>(::operator new(new_capacity * sizeof(T)));
         if(!std::is_nothrow_move_constructible_v<T>) {
             for(std::size_t i = 0; i < size_; i++){
@@ -246,8 +240,17 @@ public:
             }
         }
 
+        return newData_;
+    }
 
+    void reserve(std::size_t new_capacity) {
+        if(capacity_ >= new_capacity) {
+            return;
+        }
 
+        T* oldData_ = data_;
+        T* newData_ = allocate_and_relocate(new_capacity);
+       
         for(std::size_t i = 0; i < size_; i++) {
             data_[i].~T();
         }
@@ -257,6 +260,47 @@ public:
         ::operator delete(oldData_);
 
     }
+
+    void resize(std::size_t newSize_) {
+        if(newSize_ == size_) {
+            return;
+        }
+        if(capacity_ >= newSize_) {
+            if(newSize_ < size_) {
+                for(std::size_t i = newSize_; i < size_; i++ ) {
+                    data_[i].~T();
+                }
+            } else {
+                for(std::size_t i = size_; i< newSize_; i++) {
+                    new(data_ + i) T();
+                }
+            }
+        } else {
+            T* oldData_ = data_;
+            T* newData_ = allocate_and_relocate(newSize_);
+            
+
+            for(std::size_t i = size_; i < newSize_; i++) {
+                new(newData_ + i) T();
+            }
+
+            for(std::size_t i = 0; i < size_; i++) {
+                data_[i].~T();
+            }
+
+            data_ = newData_;
+            capacity_ = newSize_;
+            ::operator delete(oldData_);        
+            
+        }
+            size_ = newSize_;
+    }
+
+    void pop_back() noexcept {
+        --size_;
+        data_[size_].~T();
+    }
+
 };
 
 // int main()

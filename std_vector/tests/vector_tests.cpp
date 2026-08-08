@@ -109,3 +109,135 @@ TEST(Vector, ReservePreservesElements) {
     EXPECT_EQ(a[0], 1);
     EXPECT_EQ(a[1], 2);
 }
+
+TEST(Vector, GrowWithInCapacity) {
+    Vector<int> a(10);
+
+    a.push_back(1);
+    a.push_back(2);
+
+    a.resize(6);
+    ASSERT_EQ(a.size(), 6);
+    EXPECT_EQ(a[2], 0);
+    EXPECT_EQ(a[3], 0);
+    EXPECT_EQ(a[4], 0);
+    EXPECT_EQ(a[5], 0);
+}
+TEST(Vector, GrowBeyondCapacity) {
+    Vector<int> a(3);
+    
+    a.push_back(1);
+    a.push_back(2);
+    
+    ASSERT_EQ(a.capacity(), 3);
+    
+    a.resize(4);
+    
+    ASSERT_EQ(a.capacity(), 4);
+    ASSERT_EQ(a.size(), 4);
+    EXPECT_EQ(a[2], 0);
+    EXPECT_EQ(a[3], 0);
+}
+TEST(Vector, ShinkSize) {
+    Vector<int> a(5);
+    
+    a.push_back(1);
+    a.push_back(2);
+    a.push_back(3);
+    a.push_back(4);
+
+    a.resize(2);
+    
+    ASSERT_EQ(a.capacity(), 5);
+    ASSERT_EQ(a.size(), 2);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+}
+TEST(Vector, ResizeToZero) {
+    Vector<int> a(3);
+    
+    a.push_back(1);
+    a.push_back(2);
+    
+    a.resize(0);
+    
+    ASSERT_EQ(a.capacity(), 3);
+    ASSERT_EQ(a.size(), 0);
+    
+}
+TEST(Vector, ResizeToSameSize) {
+    Vector<int> a(3);
+    
+    a.push_back(1);
+    a.push_back(2);
+    
+    a.resize(2);
+    
+    ASSERT_EQ(a.capacity(), 3);
+    ASSERT_EQ(a.size(), 2);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+}
+
+TEST(Vector, PopBackSingleElement) {
+    Vector<int> a(4);
+
+    a.push_back(1);
+    a.push_back(2);
+
+    a.pop_back();
+
+    ASSERT_EQ(a.size(), 1);
+    EXPECT_EQ(a[0], 1);
+}
+
+TEST(Vector, PopBackMultipleElements) {
+    Vector<int> a(4);
+
+    a.push_back(1);
+    a.push_back(2);
+    a.push_back(3);
+    a.push_back(4);
+
+    a.pop_back();
+    a.pop_back();
+
+    ASSERT_EQ(a.size(), 2);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+
+}
+
+TEST(Vector, PopBackPreservesCapacity) {
+    Vector<int> a(4);
+
+    a.push_back(1);
+    a.push_back(2);
+    a.push_back(3);
+    a.push_back(4);
+
+    a.pop_back();
+    a.pop_back();
+
+    ASSERT_EQ(a.size(), 2);
+    ASSERT_EQ(a.capacity(), 4);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+}
+
+TEST(Vector, PopBackLeavesRemainingElementsIntact) {
+    Vector<int> a(4);
+
+    a.push_back(1);
+    a.push_back(2);
+    a.push_back(3);
+    a.push_back(4);
+
+    a.pop_back();
+    a.pop_back();
+
+    ASSERT_EQ(a.size(), 2);
+    ASSERT_EQ(a.capacity(), 4);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+}
