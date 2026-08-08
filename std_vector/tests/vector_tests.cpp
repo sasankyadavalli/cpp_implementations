@@ -74,3 +74,38 @@ TEST(Vector, SwapEmptyWithNonEmpty){
     EXPECT_EQ(b[0], 1);
     EXPECT_EQ(b[1], 2);
 }
+
+/*
+    RESERVE() function Test
+*/
+
+
+TEST(Vector, ReserveIncreaseCapacity) {
+    Vector<int> a(6);
+
+    a.reserve(10);
+
+    ASSERT_EQ(a.capacity(), 10);
+}
+
+TEST(Vector, ReserveSmallerCapacity){
+    Vector<int> a(5);
+
+    a.reserve(3);
+
+    ASSERT_EQ(a.capacity(), 5);
+
+}
+
+TEST(Vector, ReservePreservesElements) {
+    Vector<int> a(3);
+
+    a.push_back(1);
+    a.push_back(2);
+
+    a.reserve(10);
+
+    ASSERT_EQ(a.capacity(), 10);
+    EXPECT_EQ(a[0], 1);
+    EXPECT_EQ(a[1], 2);
+}

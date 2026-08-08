@@ -59,7 +59,6 @@ public:
 		other.capacity_ = 0;
 		other.size_ = 0;
 
-		std::cout << "Move constructor ended" << std::endl;
 	}
 
 	// Default constructor
@@ -219,6 +218,45 @@ public:
 
 		return *this;
 	}
+
+    void reserve(std::size_t new_capacity) {
+        if(capacity_ >= new_capacity) {
+            return;
+        }
+
+        T* oldData_ = data_;
+        T* newData_ = static_cast<T*>(::operator new(new_capacity * sizeof(T)));
+        if(!std::is_nothrow_move_constructible_v<T>) {
+            for(std::size_t i = 0; i < size_; i++){
+                try {
+                    new(newData_ + i) T(data_[i]);
+                }
+                catch(...) {
+                    for(std::size_t j = 0; j < i; j++) {
+                        newData_[j].~T();
+                    }
+
+                    ::operator delete(newData_);
+                    throw;
+                }
+            }
+        } else { // Safe: move constructor is no accept
+            for(std::size_t i = 0; i < size_; i++) {
+                new(newData_ + i) T(std::move(data_[i]));
+            }
+        }
+
+
+
+        for(std::size_t i = 0; i < size_; i++) {
+            data_[i].~T();
+        }
+
+        data_ = newData_;
+        capacity_ = new_capacity;
+        ::operator delete(oldData_);
+
+    }
 };
 
 // int main()
