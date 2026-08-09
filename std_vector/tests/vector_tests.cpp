@@ -241,3 +241,15 @@ TEST(Vector, PopBackLeavesRemainingElementsIntact) {
     EXPECT_EQ(a[0], 1);
     EXPECT_EQ(a[1], 2);
 }
+
+TEST(Vector, ClearElements) {
+    Vector<int> a(4);
+
+    a.push_back(1);
+    a.push_back(2);
+
+    a.clear();
+
+    ASSERT_EQ(a.size(), 0);
+    ASSERT_EQ(a.capacity(), 4);
+}

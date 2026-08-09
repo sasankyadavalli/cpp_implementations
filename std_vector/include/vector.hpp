@@ -301,6 +301,13 @@ public:
         data_[size_].~T();
     }
 
+    void clear() noexcept {
+        while(size_ > 0) {
+            size_ --;
+            data_[size_].~T();
+        }
+    }
+
 };
 
 // int main()
