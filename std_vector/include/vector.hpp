@@ -1,3 +1,4 @@
+#include <iostream>
 #include <new>
 #include <utility>
 
@@ -7,8 +8,7 @@ class Vector
 private:
 	std::size_t size_;
 	std::size_t capacity_;
-	T *data_;
-
+	T* data_;
 
 	/*
 		This is currently not exception safe. Should revisit. 
@@ -28,6 +28,33 @@ private:
 	}
 
 public:
+
+class VectorIterator
+    {
+        private:
+            T* ptr_;
+
+        public:
+            VectorIterator(T* ptr)
+                :ptr_(ptr) {}
+
+            T& operator *() const {
+                return *ptr_;
+            }
+
+            VectorIterator& operator ++(){
+                ++ptr_;
+                return *this;
+            }
+
+            bool operator !=(const VectorIterator& rhs) const
+            {
+                return (ptr_ != rhs.ptr_) ;
+            }
+    };
+
+
+
 	Vector(const Vector &other)
 		: capacity_(other.capacity_), size_(other.size_)
 	{
@@ -119,12 +146,12 @@ public:
 		a.swap(b);
 	}
 
-	T &operator[](std::size_t index)
+	T& operator[](std::size_t index)
 	{
 		return data_[index];
 	}
 
-	Vector &operator=(const Vector& other)
+	Vector& operator=(const Vector& other)
 	{
 		if (&other == this)
 		{
@@ -193,7 +220,7 @@ public:
 		return *this; //
 	}
 
-	Vector &operator=(Vector&& other) noexcept
+	Vector& operator=(Vector&& other) noexcept
 	{
 		if (this == &other)
 		{
@@ -308,33 +335,11 @@ public:
         }
     }
 
+    VectorIterator begin() {
+        return VectorIterator(data_);
+    }
+
+    VectorIterator end() {
+        return VectorIterator(data_ + size_);
+    }
 };
-
-// int main()
-// {
-// 	Vector<int> v(2);
-// 	Vector<int> c(10);
-// 	v.push_back(11);
-// 	c = v;
-
-// 	Vector<int> a(5);
-// 	Vector<int> b(5);
-// 	a.push_back(1);
-// 	a.push_back(2);
-// 	a.push_back(3);
-// 	b.push_back(4);
-// 	b.push_back(5);
-
-// 	using std::swap;
-// 	swap(a, b);
-
-// 	for (size_t i = 0; i < b.size(); i++)
-// 	{
-// 		std::cout << b[i] << "\n";
-// 	}
-
-// 	for(size_t i = 0; i < a.size(); i++) {
-// 		std::cout << a[i] << "\n";
-// 	}
-// 	return 0;
-// }
