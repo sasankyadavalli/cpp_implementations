@@ -268,3 +268,20 @@ TEST(Vector, IteratorTraversal) {
     ASSERT_EQ(a.size(), 4);
     ASSERT_EQ(a.capacity(), 6);    
 }
+
+TEST(Vector, RangeBasedFor)
+{
+    Vector<int> a(5);
+
+    a.push_back(10);
+    a.push_back(20);
+    a.push_back(30);
+
+    int expected = 10;
+
+    for (auto& x : a)
+    {
+        EXPECT_EQ(x, expected);
+        expected += 10;
+    }
+}
