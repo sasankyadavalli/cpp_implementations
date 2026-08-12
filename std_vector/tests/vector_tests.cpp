@@ -254,6 +254,17 @@ TEST(Vector, ClearElements) {
     ASSERT_EQ(a.capacity(), 4);
 }
 
+TEST(Vector, ClearZeroElements) {
+    Vector<int> a(4);
+
+
+    a.clear();
+
+    ASSERT_EQ(a.size(), 0);
+    ASSERT_EQ(a.capacity(), 4);
+}
+
+
 TEST(Vector, IteratorTraversal) {
     Vector<int> a(6);
     a.push_back(1);
